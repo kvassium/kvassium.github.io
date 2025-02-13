@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сайт с кнопками</title>
+    <style>
+        body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background: url('https://usagif.com/wp-content/uploads/gif-heart-3.gif') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold; /* Сделать текст заголовка жирным */
+}
+
+.button-container {
+    display: flex;
+    gap: 20px; /* Расстояние между кнопками */
+}
+
+.button {
+    padding: 20px;
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    background-color: rgba(255, 0, 0, 0.7);
+    color: white;
+    font-weight: bold; /* Сделать текст кнопок жирным */
+}
+
+.hidden {
+    display: none;
+}
+
+.sticker {
+    margin-top: 20px;
+    width: 200px; /* Укажите нужный размер */
+}
+
+#message {
+    margin-top: 40px; /* Увеличить отступ сверху для сообщения "Я ЛЮБЛЮ ТЕБЯ" */
+}
+       
+    </style>
+</head>
+<body>
+
+    <div class="title">Ты будешь моей валентинкой?</div>
+    <div class="button-container">
+        <button class="button" id="yesButton">ДА</button>
+        <button class="button" id="noButton">НЕТ</button>
+    </div>
+    <img id="sticker" class="sticker" src="https://bluemoji.io/cdn-proxy/646218c67da47160c64a84d5/64fae4cf181475b3ee690d74_91.png" alt="Стикер">
+
+    <b id="message" class="hidden">Я ЛЮБЛЮ ТЕБЯ</b>
+
+    <script>
+        let yesButton = document.getElementById('yesButton');
+        let noButton = document.getElementById('noButton');
+        let sticker = document.getElementById('sticker');
+        let message = document.getElementById('message');
+        let noClickCount = 0;
+
+        yesButton.onclick = function() {
+    yesButton.classList.add('hidden');
+    noButton.classList.add('hidden');
+    message.classList.remove('hidden');
+    
+    // Изменение текста заголовка
+    document.querySelector('.title').textContent = 'УРААААА';
+    
+    // Изменение стикера
+    sticker.src = 'https://bluemoji.io/cdn-proxy/646218c67da47160c64a84d5/64634945a6f6787d97927637_77.png'; // Замените на URL вашего стикера "стикер0"
+    
+    // Увеличение размера стикера
+    sticker.style.transform = 'scale(1.5)';
+};
+
+        noButton.onclick = function() {
+            noClickCount++;
+            yesButton.style.transform = `scale(${1 + noClickCount * 2})`;
+            if (noClickCount === 1) {
+                sticker.src = 'https://bluemoji.io/cdn-proxy/646218c67da47160c64a84d5/64634961e09531a27f702280_78.png';
+            } else if (noClickCount === 2) {
+                sticker.src = 'https://bluemoji.io/cdn-proxy/646218c67da47160c64a84d5/64faebd65d98a221699409af_93.png';
+            }
+        };
+    </script>
+
+</body>
+</html>
