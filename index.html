@@ -1,105 +1,388 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сайт с кнопками</title>
-    <style>
-        body {
-    margin: 0;
-    padding: 0;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>My Princess Project</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body, html {
+    margin: 0; padding: 0; height: 100%;
+    background: #ffe5ec;
+    font-family: 'Montserrat', sans-serif;
     overflow: hidden;
-    background: url('https://usagif.com/wp-content/uploads/gif-heart-3.gif') no-repeat center center fixed;
-    background-size: cover;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    color: white;
-    font-family: Arial, sans-serif;
-}
+  }
 
-.title {
-    font-size: 24px;
-    margin-bottom: 20px;
-    font-weight: bold; /* Сделать текст заголовка жирным */
-}
+  /* Контейнер карточки */
+  #container {
+    position: relative;
+    width: 320px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+    text-align: center;
+    padding-bottom: 30px;
+    user-select: none;
+    z-index: 10;
+  }
 
-.button-container {
-    display: flex;
-    gap: 20px; /* Расстояние между кнопками */
-}
+  /* Фото котят */
+  #container img.kittens {
+    width: 280px;
+    border-radius: 20px 20px 0 0;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.3);
+  }
 
-.button {
-    padding: 20px;
-    font-size: 20px;
-    cursor: pointer;
+  /* Подпись под фото */
+  #caption {
+    margin: 15px 0 25px 0;
+    color: #e91e63;
+    font-weight: 600;
+    font-size: 18px;
+  }
+
+  /* Кнопка «Открыть» */
+  #openBtn {
+    background-color: #e91e63;
     border: none;
-    border-radius: 5px;
-    background-color: rgba(255, 0, 0, 0.7);
     color: white;
-    font-weight: bold; /* Сделать текст кнопок жирным */
-}
+    font-weight: 600;
+    font-size: 16px;
+    padding: 14px;
+    border-radius: 14px;
+    width: 90%;
+    margin: 0 auto 15px auto;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  #openBtn:hover {
+    background-color: #d81b60;
+  }
 
-.hidden {
+  /* Модальное окно конверта */
+  #envelope {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 12px 34px rgba(233, 30, 99, 0.4);
+    width: 320px;
+    padding: 30px 20px 40px;
+    z-index: 15;
+    text-align: center;
+    user-select: none;
+  }
+  #envelope.hidden {
     display: none;
-}
+  }
 
-.sticker {
-    margin-top: 20px;
-    width: 200px; /* Укажите нужный размер */
-}
+  /* Иконка конверта - ЗАМЕНА НА ИЗОБРАЖЕНИЕ */
+  #envelope .icon {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 25px auto;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 5px 15px rgba(233, 30, 99, 0.4);
+    overflow: hidden;
+    background: #e91e63;
+    padding: 15px;
+  }
+  #envelope .icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 10px;
+  }
 
-#message {
-    margin-top: 40px; /* Увеличить отступ сверху для сообщения "Я ЛЮБЛЮ ТЕБЯ" */
-}
-       
-    </style>
+  /* Кнопки внутри модалки */
+  #envelope button {
+    width: 90%;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 14px;
+    border-radius: 14px;
+    cursor: pointer;
+    margin: 8px auto 0 auto;
+    display: block;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  #acceptBtn {
+    background-color: #e91e63;
+    color: white;
+    border: none;
+  }
+  #acceptBtn:hover {
+    background-color: #d81b60;
+  }
+  #declineBtn {
+    background-color: transparent;
+    border: 2px solid #e91e63;
+    color: #e91e63;
+  }
+  #declineBtn:hover {
+    background-color: #fce4ec;
+  }
+
+  /* Экран с грустным смайликом */
+  #sad {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 15;
+    user-select: none;
+    font-size: 110px;
+    color: #e91e63;
+  }
+  #sad.hidden {
+    display: none;
+  }
+  #sad button {
+    margin-top: 30px;
+    background-color: #e91e63;
+    border: none;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 14px 60px;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(233, 30, 99, 0.4);
+    transition: background-color 0.3s ease;
+  }
+  #sad button:hover {
+    background-color: #d81b60;
+  }
+
+  /* Письмо с содержимым */
+  #letter {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    width: 90%;
+    max-width: 400px;
+    max-height: 80vh;
+    border-radius: 20px;
+    box-shadow: 0 12px 34px rgba(233, 30, 99, 0.3);
+    padding: 28px 30px 40px;
+    z-index: 15;
+    user-select: none;
+    color: #212121;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  #letter.hidden {
+    display: none;
+  }
+  
+  /* Контейнер для текста с прокруткой */
+  .letter-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+    margin-bottom: 20px;
+  }
+  
+  /* Стили для скроллбара */
+  .letter-content::-webkit-scrollbar {
+    width: 6px;
+  }
+  .letter-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  .letter-content::-webkit-scrollbar-thumb {
+    background: #e91e63;
+    border-radius: 10px;
+  }
+  .letter-content::-webkit-scrollbar-thumb:hover {
+    background: #d81b60;
+  }
+  
+  #letter h1 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #e91e63;
+    font-weight: 700;
+    font-size: 24px;
+  }
+  #letter p {
+    font-size: 14.5px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+  }
+  #againBtn {
+    background-color: #e91e63;
+    border: none;
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    padding: 14px;
+    border-radius: 14px;
+    cursor: pointer;
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
+    transition: background-color 0.3s ease;
+    flex-shrink: 0;
+  }
+  #againBtn:hover {
+    background-color: #d81b60;
+  }
+
+  /* Анимация падающих сердечек */
+  .heart {
+    position: fixed;
+    top: -50px;
+    width: 20px;
+    height: 20px;
+    background: url('data:image/svg+xml;utf8,<svg fill="%23e91e63" height="20" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 1.01 4.5 2.5C13.09 4.01 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z"/></svg>') no-repeat center center;
+    background-size: contain;
+    animation-name: fall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  @keyframes fall {
+    0% {
+      transform: translateY(-60px) translateX(0) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(110vh) translateX(40px) rotate(360deg);
+      opacity: 0;
+    }
+  }
+</style>
 </head>
 <body>
 
-    <div class="title">Ты будешь моей валентинкой?</div>
-    <div class="button-container">
-        <button class="button" id="yesButton">ДА</button>
-        <button class="button" id="noButton">НЕТ</button>
-    </div>
-    <img id="sticker" class="sticker" src="https://bluemoji.io/cdn-proxy/646218c67da47160c64a84d5/64fae4cf181475b3ee690d74_91.png" alt="Стикер">
+<!-- Падающие сердечки -->
+<script>
+  const createHeart = () => {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.style.left = `${Math.random() * 100}vw`;
+    heart.style.animationDuration = `${4 + Math.random() * 4}s`;
+    heart.style.animationDelay = `${Math.random() * 8}s`;
+    heart.style.opacity = 0.7 + Math.random() * 0.3;
+    heart.style.width = `${12 + Math.random() * 18}px`;
+    heart.style.height = heart.style.width;
+    document.body.appendChild(heart);
 
-    <b id="message" class="hidden">Я ЛЮБЛЮ ТЕБЯ</b>
+    heart.addEventListener('animationend', () => {
+      heart.remove();
+    });
+  };
 
-    <script>
-        let yesButton = document.getElementById('yesButton');
-        let noButton = document.getElementById('noButton');
-        let sticker = document.getElementById('sticker');
-        let message = document.getElementById('message');
-        let noClickCount = 0;
+  setInterval(createHeart, 100);
+</script>
 
-        yesButton.onclick = function() {
-    yesButton.classList.add('hidden');
-    noButton.classList.add('hidden');
-    message.classList.remove('hidden');
-    
-    // Изменение текста заголовка
-    document.querySelector('.title').textContent = 'УРААААА';
-    
-    // Изменение стикера
-    sticker.src = 'https://bluemoji.io/cdn-proxy/646218c67da47160c64a84d5/64634945a6f6787d97927637_77.png'; // Замените на URL вашего стикера "стикер0"
-    
-    // Увеличение размера стикера
-    sticker.style.transform = 'scale(1.5)';
-};
+<!-- Основной экран с котятами -->
+<div id="container">
+  <img
+    class="kittens"
+    src="https://cs13.pikabu.ru/post_img/2023/04/14/7/1681472041119176939.jpg"
+    alt="Two kittens"
+    loading="lazy"
+  />
+  <div id="caption">For my beautiful princess</div>
+  <button id="openBtn">Открыть</button>
+</div>
 
-        noButton.onclick = function() {
-            noClickCount++;
-            yesButton.style.transform = `scale(${1 + noClickCount * 2})`;
-            if (noClickCount === 1) {
-                sticker.src = 'https://bluemoji.io/cdn-proxy/646218c67da47160c64a84d5/64634961e09531a27f702280_78.png';
-            } else if (noClickCount === 2) {
-                sticker.src = 'https://bluemoji.io/cdn-proxy/646218c67da47160c64a84d5/64faebd65d98a221699409af_93.png';
-            }
-        };
-    </script>
+<!-- Модалка конверта с кнопками - ЗДЕСЬ ЗАМЕНА ИКОНКИ -->
+<div id="envelope" class="hidden" role="dialog" aria-modal="true" aria-labelledby="envelopeTitle">
+  <div class="icon" aria-hidden="true">
+    <img src="https://storage.googleapis.com/multi-static-content/previews/artage-io-thumb-ea4cfd342da993d34b75579b63557779.png" alt="Envelope icon">
+  </div>
+  <button id="acceptBtn">Принять</button>
+  <button id="declineBtn">Отклонить</button>
+</div>
+
+<!-- Грустный экран -->
+<div id="sad" class="hidden" role="alert" aria-live="assertive">
+  <img src="https://bluemoji.io/cdn-proxy/646218c67da47160c64a84d5/646347c66faef9fd60816082_68.png" alt="">
+  <button id="restartBtn">Рестарт</button>
+</div>
+
+<!-- Письмо -->
+<div id="letter" class="hidden" role="document" tabindex="-1">
+  <h1>Моя милая девочка</h1>
+  <div class="letter-content">
+    <p>
+      Моя маленькая девочка, чудо моё, словами не передать как сильно я люблю тебя, как восхищаюсь тобой и тем ,что ты делаешь, смотря на тебя мне хочется стать лучше, прости ,что я такой ревнивый,для тебя я готов меняться, я просто боюсь тебя потерять из-за своей глупости, упёртости и забывчивости(( 
+    </p>
+    <p>
+      Я хочу сказать ,что я никогда не встречал настолько милую, завораживающую и прекрасную девочку,в моих глазах ты принцесса, каждую секунду хочется наслаждаться твоим обществом, будь то разговор или просто случайный кружочек,прости меня,что иногда из-за этого не даю пространства вздохнуть, ты – моё будущее, мой уют, мой дом ,ты то о чём я даже мечтать не мог🥺
+    </p>
+    <p>
+      Прости меня, пожалуйста, за то что обижаю тебя , могу быть грубым и ты чувствуешь постоянное напряжение из-за меня, мне правда очень жаль и очень стыдно, я хочу перед тобой извиниться за свои выходки и сказать, "Ты моя мотивация просыпаться утром, ты мое тепло в самый холодный день в году, ты согреваешь моё сердце на гигантских расстояниях и я хочу быть только с тобой, я знаю ,что ни тебе ,ни мне никто другой не нужен, мы были созданы друг для друга и наша любовь крепнет каждую секунду, мы обязательно через все пройдем вместе, чтобы не встретилось на нашем пути❤️Связаны🫂"
+    </p>
+    <p>
+      Я обожаю тебя, моя маленькая и буду принимать любой ,чтобы не говорил и не делал, ты мой выбор и мне никто другой не нужен, только твои глазки меня манят, только твоя улыбка сводит меня с ума, а твой голосочек , как сладкая песня для моих ушей, я правда очень скучаю и безумно сильно люблю тебя ❤️❤️💋❤️
+    </p>
+  </div>
+  <button id="againBtn">Заново</button>
+</div>
+
+<script>
+  const openBtn = document.getElementById('openBtn');
+  const envelope = document.getElementById('envelope');
+  const acceptBtn = document.getElementById('acceptBtn');
+  const declineBtn = document.getElementById('declineBtn');
+  const sad = document.getElementById('sad');
+  const restartBtn = document.getElementById('restartBtn');
+  const letter = document.getElementById('letter');
+  const againBtn = document.getElementById('againBtn');
+  const container = document.getElementById('container');
+
+  openBtn.addEventListener('click', () => {
+    container.style.display = 'none';
+    envelope.classList.remove('hidden');
+    envelope.focus?.();
+  });
+
+  acceptBtn.addEventListener('click', () => {
+    envelope.classList.add('hidden');
+    letter.classList.remove('hidden');
+    letter.focus();
+  });
+
+  declineBtn.addEventListener('click', () => {
+    envelope.classList.add('hidden');
+    sad.classList.remove('hidden');
+    restartBtn.focus();
+  });
+
+  restartBtn.addEventListener('click', () => {
+    sad.classList.add('hidden');
+    container.style.display = 'block';
+    openBtn.focus();
+  });
+
+  againBtn.addEventListener('click', () => {
+    letter.classList.add('hidden');
+    container.style.display = 'block';
+    openBtn.focus();
+  });
+</script>
 
 </body>
 </html>
